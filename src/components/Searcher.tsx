@@ -3,9 +3,9 @@ import { ChangeEvent, Component, Fragment } from 'react';
 import classes from './Searcher.module.css';
 import ItemList from './ItemList';
 
-class Searcher extends Component<{ query: string }, { inputValue: string }> {
-  constructor(props: { query: string }) {
-    super(props);
+class Searcher extends Component<object, { inputValue: string }> {
+  constructor() {
+    super({});
 
     this.state = {
       inputValue: '',
@@ -16,7 +16,7 @@ class Searcher extends Component<{ query: string }, { inputValue: string }> {
     this.setState({ inputValue: event.target.value });
   };
 
-  trowError = () => {};
+  throwError = () => {};
 
   render = () => {
     return (
@@ -25,10 +25,10 @@ class Searcher extends Component<{ query: string }, { inputValue: string }> {
           <input type="search" onChange={this.handleChange} />
           <button
             type="button"
-            onClick={this.trowError}
+            onClick={this.throwError}
             className={classes.error_button}
           >
-            Trow error
+            Throw error
           </button>
         </div>
         <ItemList searchTerm={this.state.inputValue} />
