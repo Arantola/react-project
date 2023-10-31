@@ -1,8 +1,7 @@
 .searcher {
   position: relative;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
   margin: 2rem auto;
   background-color: white;
   padding: 1rem;
@@ -11,9 +10,13 @@
   text-align: center;
 }
 
-.error_button {
-  position: absolute;
-  top: 50%;
-  right: 5%;
-  transform: translateY(-50%);
+.searcher > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.searcher input {
+  padding: 12px 32px;
 }

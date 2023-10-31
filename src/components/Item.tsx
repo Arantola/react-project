@@ -3,7 +3,7 @@ import classes from './Item.module.css';
 import { MockItem } from '../types/interfaces';
 
 class Item extends Component<{ item: MockItem }> {
-  render() {
+  render = () => {
     const { name, image, description } = this.props.item;
     return (
       <li className={classes.item}>

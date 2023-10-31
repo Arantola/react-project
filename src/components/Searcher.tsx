@@ -1,33 +1,59 @@
-import { ChangeEvent, Component, Fragment } from 'react';
+import React, { Component, Fragment, RefObject } from 'react';
 
 import classes from './Searcher.module.css';
 import ItemList from './ItemList';
 
-class Searcher extends Component<object, { inputValue: string }> {
+type SearcherState = { inputValue: string };
+
+class Searcher extends Component<object, SearcherState> {
+  inputRef: RefObject<HTMLInputElement>;
   constructor() {
     super({});
 
     this.state = {
       inputValue: '',
     };
+    this.inputRef = React.createRef();
   }
 
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: event.target.value });
+  componentDidMount = () => {
+    const storedInputValue = localStorage.getItem('inputValue');
+    if (storedInputValue && this.inputRef.current) {
+      this.inputRef.current.value = storedInputValue;
+    }
   };
 
-  throwError = () => {};
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.target.value = event.target.value.trimStart();
+  };
+
+  handleSearchClick = () => {
+    if (this.inputRef.current) {
+      const currentInputValue = this.inputRef.current.value.trim();
+      if (currentInputValue !== this.state.inputValue) {
+        this.setState({ inputValue: currentInputValue });
+        localStorage.setItem('inputValue', currentInputValue);
+      }
+    }
+  };
+
+  handleErrorClick = () => {};
 
   render = () => {
     return (
       <Fragment>
         <div className={classes.searcher}>
-          <input type="search" onChange={this.handleChange} />
-          <button
-            type="button"
-            onClick={this.throwError}
-            className={classes.error_button}
-          >
+          <div>
+            <input
+              type="search"
+              ref={this.inputRef}
+              onChange={this.handleInputChange}
+            />
+            <button type="button" onClick={this.handleSearchClick}>
+              Search
+            </button>
+          </div>
+          <button type="button" onClick={this.handleErrorClick}>
             Throw error
           </button>
         </div>

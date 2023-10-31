@@ -4,10 +4,8 @@ import classes from './ItemList.module.css';
 import Item from './Item';
 import getData from '../utils/api';
 
-class ItemList extends Component<
-  { searchTerm: string },
-  { items: MockItem[]; filteredItems: MockItem[] }
-> {
+type ItemListState = { items: MockItem[]; filteredItems: MockItem[] };
+class ItemList extends Component<{ searchTerm: string }, ItemListState> {
   constructor(props: { searchTerm: string }) {
     super(props);
 
@@ -17,28 +15,28 @@ class ItemList extends Component<
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.getData();
-  }
+  };
 
-  componentDidUpdate(prevProps: { searchTerm: string }) {
+  componentDidUpdate = (prevProps: { searchTerm: string }) => {
     if (prevProps.searchTerm !== this.props.searchTerm) {
       this.setState({
         filteredItems: this.state.items.filter((item) =>
-          item.name.includes(this.props.searchTerm)
+          item.name.toLowerCase().includes(this.props.searchTerm.toLowerCase())
         ),
       });
     }
-  }
+  };
 
-  async getData() {
+  getData = async () => {
     try {
-      const tasks = await getData();
-      this.setState({ items: tasks, filteredItems: tasks });
+      const items = await getData();
+      this.setState({ items, filteredItems: items });
     } catch (error) {
       throw new Error('Fetch error!');
     }
-  }
+  };
 
   render = () => {
     return (
