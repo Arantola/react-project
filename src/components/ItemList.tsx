@@ -5,13 +5,18 @@ import Item from './Item';
 import getData from '../utils/api';
 
 type ItemListProps = { searchTerm: string };
-type ItemListState = { items: MockItem[]; filteredItems: MockItem[] };
+type ItemListState = {
+  isLoading: boolean;
+  items: MockItem[];
+  filteredItems: MockItem[];
+};
 
 class ItemList extends Component<ItemListProps, ItemListState> {
   constructor(props: ItemListProps) {
     super(props);
 
     this.state = {
+      isLoading: true,
       items: [],
       filteredItems: [],
     };
@@ -23,31 +28,38 @@ class ItemList extends Component<ItemListProps, ItemListState> {
 
   componentDidUpdate = (prevProps: ItemListProps) => {
     if (prevProps.searchTerm !== this.props.searchTerm) {
+      this.setState({ isLoading: true });
       this.setState({
         filteredItems: this.state.items.filter((item) =>
           item.name.toLowerCase().includes(this.props.searchTerm.toLowerCase())
         ),
       });
+      this.setState({ isLoading: false });
     }
   };
 
   getData = async () => {
     try {
       const items = await getData();
-      this.setState({ items, filteredItems: items });
+      this.setState({ items, filteredItems: items, isLoading: false });
     } catch (error) {
       throw new Error('Fetch error!');
     }
   };
 
   render = () => {
+    const { isLoading, filteredItems } = this.state;
     return (
       <div className={classes.list}>
-        <ul>
-          {this.state.filteredItems.map((item) => (
-            <Item key={item.id} item={item} />
-          ))}
-        </ul>
+        {isLoading ? (
+          <span>Loading...</span>
+        ) : (
+          <ul>
+            {filteredItems.map((item) => (
+              <Item key={item.id} item={item} />
+            ))}
+          </ul>
+        )}
       </div>
     );
   };
