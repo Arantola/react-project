@@ -1,14 +1,15 @@
-import React, { Component, Fragment, RefObject } from 'react';
+import React, { Component, RefObject } from 'react';
 
 import classes from './Searcher.module.css';
 import ItemList from './ItemList';
+import { ErrorHandler } from '../types/interfaces';
 
 type SearcherState = { inputValue: string };
 
-class Searcher extends Component<object, SearcherState> {
+class Searcher extends Component<ErrorHandler, SearcherState> {
   inputRef: RefObject<HTMLInputElement>;
-  constructor() {
-    super({});
+  constructor(props: ErrorHandler) {
+    super(props);
 
     this.state = {
       inputValue: '',
@@ -37,11 +38,18 @@ class Searcher extends Component<object, SearcherState> {
     }
   };
 
-  handleErrorClick = () => {};
+  handleErrorClick = () => {
+    try {
+      throw new Error('Custom error from Searcher component');
+    } catch (error) {
+      console.error(error);
+      this.props.onErrorChange(true);
+    }
+  };
 
   render = () => {
     return (
-      <Fragment>
+      <>
         <div className={classes.searcher}>
           <div>
             <input
@@ -58,7 +66,7 @@ class Searcher extends Component<object, SearcherState> {
           </button>
         </div>
         <ItemList searchTerm={this.state.inputValue} />
-      </Fragment>
+      </>
     );
   };
 }

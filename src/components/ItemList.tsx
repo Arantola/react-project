@@ -4,9 +4,11 @@ import classes from './ItemList.module.css';
 import Item from './Item';
 import getData from '../utils/api';
 
+type ItemListProps = { searchTerm: string };
 type ItemListState = { items: MockItem[]; filteredItems: MockItem[] };
-class ItemList extends Component<{ searchTerm: string }, ItemListState> {
-  constructor(props: { searchTerm: string }) {
+
+class ItemList extends Component<ItemListProps, ItemListState> {
+  constructor(props: ItemListProps) {
     super(props);
 
     this.state = {
@@ -19,7 +21,7 @@ class ItemList extends Component<{ searchTerm: string }, ItemListState> {
     this.getData();
   };
 
-  componentDidUpdate = (prevProps: { searchTerm: string }) => {
+  componentDidUpdate = (prevProps: ItemListProps) => {
     if (prevProps.searchTerm !== this.props.searchTerm) {
       this.setState({
         filteredItems: this.state.items.filter((item) =>
