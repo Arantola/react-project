@@ -8,12 +8,10 @@ type SearcherState = { inputValue: string };
 
 class Searcher extends Component<ErrorHandler, SearcherState> {
   inputRef: RefObject<HTMLInputElement>;
+
   constructor(props: ErrorHandler) {
     super(props);
-
-    this.state = {
-      inputValue: '',
-    };
+    this.state = { inputValue: '' };
     this.inputRef = React.createRef();
   }
 
@@ -24,14 +22,16 @@ class Searcher extends Component<ErrorHandler, SearcherState> {
     }
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.value = event.target.value.trimStart();
+  static handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.trimStart();
+    localStorage.setItem('inputValue', value);
   };
 
   handleSearchClick = () => {
+    const { inputValue } = this.state;
     if (this.inputRef.current) {
       const currentInputValue = this.inputRef.current.value.trim();
-      if (currentInputValue !== this.state.inputValue) {
+      if (currentInputValue !== inputValue) {
         this.setState({ inputValue: currentInputValue });
         localStorage.setItem('inputValue', currentInputValue);
       }
@@ -39,15 +39,16 @@ class Searcher extends Component<ErrorHandler, SearcherState> {
   };
 
   handleErrorClick = () => {
+    const { onErrorChange } = this.props;
     try {
       throw new Error('Custom error from Searcher component');
     } catch (error) {
-      console.error(error);
-      this.props.onErrorChange(true);
+      onErrorChange(true);
     }
   };
 
   render = () => {
+    const { inputValue } = this.state;
     return (
       <>
         <div className={classes.searcher}>
@@ -55,7 +56,7 @@ class Searcher extends Component<ErrorHandler, SearcherState> {
             <input
               type="search"
               ref={this.inputRef}
-              onChange={this.handleInputChange}
+              onChange={Searcher.handleInputChange}
             />
             <button type="button" onClick={this.handleSearchClick}>
               Search
@@ -65,7 +66,7 @@ class Searcher extends Component<ErrorHandler, SearcherState> {
             Throw error
           </button>
         </div>
-        <ItemList searchTerm={this.state.inputValue} />
+        <ItemList searchTerm={inputValue} />
       </>
     );
   };

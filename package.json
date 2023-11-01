@@ -4,15 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --fix --ignore-pattern node_modules",
+    "dev": "vite",    
     "preview": "vite preview",
-    "format:fix": "prettier --write"
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --fix --report-unused-disable-directives",
+    "lint:fix": "eslint ./src --fix",
+    "format:fix": "prettier ./src --write --config .prettierrc.cjs",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "npm run lint"
+      "npm run lint",
+      "npm run lint:fix",
+      "npm run format:fix"
     ]
   },
   "dependencies": {
@@ -26,7 +31,12 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "eslint": "^8.52.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",

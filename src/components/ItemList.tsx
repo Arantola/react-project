@@ -27,11 +27,14 @@ class ItemList extends Component<ItemListProps, ItemListState> {
   };
 
   componentDidUpdate = (prevProps: ItemListProps) => {
-    if (prevProps.searchTerm !== this.props.searchTerm) {
+    const { searchTerm } = this.props;
+    const { items } = this.state;
+
+    if (prevProps.searchTerm !== searchTerm) {
       this.setState({ isLoading: true });
       this.setState({
-        filteredItems: this.state.items.filter((item) =>
-          item.name.toLowerCase().includes(this.props.searchTerm.toLowerCase())
+        filteredItems: items.filter((item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
         ),
       });
       this.setState({ isLoading: false });

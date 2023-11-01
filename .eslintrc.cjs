@@ -2,25 +2,45 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true, jest: true, node: true },
   extends: [
-    'eslint:recommended',
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'prettier',
   ],
+  overrides: [
+    {
+      env: {
+        node: true,
+      },
+      files: ['.eslintrc.{js,cjs}'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+    },
+  ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
-  plugins: ['@typescript-eslint', 'react-refresh', 'react', 'react-hooks'],
+  plugins: [
+    '@typescript-eslint',
+    'react-refresh',
+    'react',
+    'react-hooks',
+    'prettier',
+  ],
   rules: {
+    'react/no-arrow-function-lifecycle': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'comma-dangle': ['error', 'only-multiline'],
+    'react/prefer-stateless-function': 'off',
     'react/prop-types': 'off',
     'react/display-name': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
@@ -32,6 +52,15 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    'prettier/prettier': 'error',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
   settings: {
     react: {
@@ -39,4 +68,14 @@ module.exports = {
       version: 'detect',
     },
   },
+  ignorePatterns: [
+    'node_modules/',
+    '**/node_modules/',
+    '/**/node_modules/*',
+    'out/',
+    'dist/',
+    'build/',
+    'vite.config.ts',
+    '.eslintrc.cjs',
+  ],
 };
