@@ -1,8 +1,8 @@
 import { Component } from 'react';
 
 import { ChildrenProps } from '../types/interfaces';
-import Searcher from './Searcher';
-import Error from './Error';
+import Error from '../pages/Error';
+import Searcher from '../pages/Searcher';
 
 type ErrorState = {
   hasError: boolean;

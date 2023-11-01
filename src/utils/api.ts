@@ -1,6 +1,6 @@
 const BASE_URL = 'https://653fe29245bedb25bfc16586.mockapi.io/api/';
 
-const getData = async (search = '') => {
+const fetchData = async (search = '') => {
   try {
     const url = new URL(`${BASE_URL}/items`);
     if (search !== '') {
@@ -22,4 +22,4 @@ const getData = async (search = '') => {
   }
 };
 
-export default getData;
+export default fetchData;
