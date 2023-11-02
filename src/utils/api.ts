@@ -14,9 +14,8 @@ const fetchData = async (search = '') => {
 
     if (response.ok) {
       return await response.json();
-    } else {
-      throw new Error('Fetch error!');
     }
+    throw new Error('Fetch error!');
   } catch (error) {
     throw new Error('Fetch error!');
   }

@@ -6,7 +6,7 @@ import fetchData from '../utils/api';
 
 type ItemListProps = { searchTerm: string };
 
-const ItemList = (props: ItemListProps) => {
+function ItemList(props: ItemListProps) {
   const { searchTerm } = props;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [items, setItems] = useState<MockItem[]>([]);
@@ -37,6 +37,6 @@ const ItemList = (props: ItemListProps) => {
       )}
     </div>
   );
-};
+}
 
 export default ItemList;

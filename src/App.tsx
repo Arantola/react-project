@@ -1,8 +1,8 @@
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
-const App = () => {
+function App() {
   return <ErrorBoundary />;
-};
+}
 
 export default App;

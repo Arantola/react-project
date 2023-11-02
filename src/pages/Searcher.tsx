@@ -4,7 +4,7 @@ import classes from './Searcher.module.css';
 import ItemList from '../components/ItemList';
 import { ErrorHandler } from '../types/interfaces';
 
-const Searcher = (props: ErrorHandler) => {
+function Searcher(props: ErrorHandler) {
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,7 +16,8 @@ const Searcher = (props: ErrorHandler) => {
   }, []);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    event.target.value = event.target.value.trimStart();
+    const value = event.target.value.trimStart();
+    localStorage.setItem('inputValue', value);
   };
 
   const handleSearchClick = () => {
@@ -30,11 +31,11 @@ const Searcher = (props: ErrorHandler) => {
   };
 
   const handleErrorClick = () => {
+    const { onErrorChange } = props;
     try {
       throw new Error('Custom error from Searcher component');
     } catch (error) {
-      console.error(error);
-      props.onErrorChange(true);
+      onErrorChange(true);
     }
   };
 
@@ -54,6 +55,6 @@ const Searcher = (props: ErrorHandler) => {
       <ItemList searchTerm={inputValue} />
     </>
   );
-};
+}
 
 export default Searcher;

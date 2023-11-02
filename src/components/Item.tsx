@@ -1,19 +1,19 @@
 import classes from './Item.module.css';
-
 import { MockItem } from '../types/interfaces';
 
-const Item = (props: { item: MockItem }) => {
-  const { name, image, description } = props.item;
+function Item(props: { item: MockItem }) {
+  const { item } = props;
+  const { name, image, description } = item;
 
   return (
     <li className={classes.item}>
-      <img src={image}></img>
+      <img src={image} alt={name} />
       <div>
         <p>{name}</p>
         <p>{description}</p>
       </div>
     </li>
   );
-};
+}
 
 export default Item;

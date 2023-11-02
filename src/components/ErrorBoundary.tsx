@@ -14,31 +14,28 @@ class ErrorBoundary extends Component<ChildrenProps, ErrorState> {
     this.state = { hasError: false };
   }
 
-  public static getDerivedStateFromError = (): ErrorState => {
-    return { hasError: true };
-  };
+  public static getDerivedStateFromError = (): ErrorState => ({
+    hasError: true,
+  });
 
-  public componentDidCatch = () => {
+  public componentDidCatch() {
     this.setState({ hasError: true });
-  };
+  }
 
   handleErrorState = (isError: boolean) => {
+    // eslint-disable-next-line no-console
     if (isError) console.error('Error caught by Error Boundary');
     this.setState({ hasError: isError });
   };
 
-  render = () => {
+  render() {
     const { hasError } = this.state;
-    return (
-      <>
-        {hasError ? (
-          <Error onErrorChange={this.handleErrorState} />
-        ) : (
-          <Searcher onErrorChange={this.handleErrorState} />
-        )}
-      </>
+    return hasError ? (
+      <Error onErrorChange={this.handleErrorState} />
+    ) : (
+      <Searcher onErrorChange={this.handleErrorState} />
     );
-  };
+  }
 }
 
 export default ErrorBoundary;
