@@ -1,0 +1,22 @@
+.searcher {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem auto;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 40rem;
+  text-align: center;
+}
+
+.searcher > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.searcher input {
+  padding: 12px 32px;
+}
