@@ -2,7 +2,7 @@ import { Component } from 'react';
 
 import { ChildrenProps } from '../types/interfaces';
 import Error from '../pages/Error';
-import Searcher from '../pages/Searcher';
+import Main from '../pages/Main';
 
 type ErrorState = {
   hasError: boolean;
@@ -16,6 +16,7 @@ class ErrorBoundary extends Component<ChildrenProps, ErrorState> {
 
   public static getDerivedStateFromError = (): ErrorState => ({
     hasError: true,
+    // hasError: false,
   });
 
   public componentDidCatch() {
@@ -33,7 +34,7 @@ class ErrorBoundary extends Component<ChildrenProps, ErrorState> {
     return hasError ? (
       <Error onErrorChange={this.handleErrorState} />
     ) : (
-      <Searcher onErrorChange={this.handleErrorState} />
+      <Main onErrorChange={this.handleErrorState} />
     );
   }
 }
