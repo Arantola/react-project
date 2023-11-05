@@ -1,0 +1,16 @@
+.list {
+  padding: 10px;
+  background-color: #412945;
+  max-width: 52.5vw;
+  border: 2px solid #211424;
+  border-radius: 5px;
+}
+
+.list ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 15px;
+}

@@ -1,0 +1,27 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 5px;
+  width: 90%;
+  height: max-content;
+  border-radius: 5px;
+  background-color: #412945;
+  max-width: 52.5vw;
+  border: 2px solid #211424;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.info p {
+  color: #b1a9a9;
+}
+
+.info p span {
+  color: #fff;
+}
