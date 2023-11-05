@@ -1,0 +1,16 @@
+.card {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.img {
+  width: auto;
+  max-height: 28vh;
+}
+
+.item p {
+  font-size: small;
+}

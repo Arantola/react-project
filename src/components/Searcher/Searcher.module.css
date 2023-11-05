@@ -1,7 +1,10 @@
-.main {
+.searcher {
+  width: 100vw;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 30px;
+  background-color: #211424;
+  padding: 1rem;
   text-align: center;
 }

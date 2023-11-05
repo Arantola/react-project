@@ -9,18 +9,24 @@ html {
 }
 
 body {
+  height: 100%;
   margin: 0;
   background-color: #3f3f3f;
+  background-image: url(./assets/background.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 
 button {
   font: inherit;
   cursor: pointer;
-  background-color: #800040;
+  background-color: #a829c3;
   color: white;
-  border: 1px solid #800040;
-  border-radius: 8px;
-  padding: 0.75rem 2rem;
+  padding: 12px 28px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  border: none;
 }
 
 button:hover,

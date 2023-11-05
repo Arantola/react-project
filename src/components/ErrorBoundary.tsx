@@ -1,41 +1,34 @@
-import { Component } from 'react';
+import { Component, ReactNode } from 'react';
 
-import { ChildrenProps } from '../types/interfaces';
-import Error from '../pages/Error';
-import Main from '../pages/Main';
+import Error from '../pages/Error/Error';
 
 type ErrorState = {
   hasError: boolean;
 };
 
-class ErrorBoundary extends Component<ChildrenProps, ErrorState> {
-  constructor(props: ChildrenProps) {
+export interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
   public static getDerivedStateFromError = (): ErrorState => ({
     hasError: true,
-    // hasError: false,
   });
 
   public componentDidCatch() {
     this.setState({ hasError: true });
   }
 
-  handleErrorState = (isError: boolean) => {
-    // eslint-disable-next-line no-console
-    if (isError) console.error('Error caught by Error Boundary');
-    this.setState({ hasError: isError });
-  };
-
-  render() {
+  render(): ReactNode {
+    const { children } = this.props;
     const { hasError } = this.state;
-    return hasError ? (
-      <Error onErrorChange={this.handleErrorState} />
-    ) : (
-      <Main onErrorChange={this.handleErrorState} />
-    );
+
+    return hasError ? <Error /> : children;
   }
 }
 
