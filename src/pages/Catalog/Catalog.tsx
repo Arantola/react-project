@@ -1,26 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 
 import classes from './Catalog.module.css';
 
-import usePagination from '../../hooks/usePaginaton/usePagination';
-import { fetchData, fetchDataWithName } from '../../services/apiService';
-import { ApiResponse } from '../../services/apiTypes';
-
+import { useAppContext } from '../../context/appContext';
 import Searcher from '../../components/Searcher/Searcher';
 import CardList from '../../components/CardList/CardList';
 import Paginator from '../../components/UI/Paginator/Paginator';
+import { fetchData, fetchDataWithName } from '../../services/apiService';
+import usePagination from '../../hooks/usePaginaton/usePagination';
 
 function Catalog() {
-  const [data, setData] = useState<ApiResponse | null>(null);
-  const [searchValue, setSearchValue] = useState<string>(
-    localStorage.getItem('searchValue') || ''
-  );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchParams, setSeacrhParams] = useSearchParams();
+  const { data, setData, searchValue, setSearchValue, setIsLoading } =
+    useAppContext()!;
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const { handleUpdateItemsOnPage, handleUpdatePageNumber } = usePagination(
     data,
-    setSeacrhParams
+    setSearchParams
   );
   const pageSize = searchParams.get('pageSize') || '';
   const currentPage = searchParams.get('page');
@@ -29,20 +26,24 @@ function Catalog() {
   const handleUpdateSearchValue = (newValue: string): void => {
     setSearchValue(newValue);
   };
-  const hanldeFetchDataAndSetData = useCallback(async (): Promise<void> => {
+
+  const handleFetchDataAndSetData = useCallback(async (): Promise<void> => {
     setIsLoading(true);
+
     try {
       const fetchedData = searchValue
         ? await fetchDataWithName(searchValue, currentPage, currentPageSize)
         : await fetchData(currentPage, currentPageSize);
-
       setData(fetchedData);
-      if (!currentPage && !currentPageSize) {
-        if (fetchedData && fetchedData.page && fetchedData.pageSize) {
-          setSeacrhParams({
-            page: fetchedData.page.toString(),
-            pageSize: fetchedData.pageSize.toString(),
-          });
+
+      if (fetchedData !== null) {
+        if (!currentPage && !currentPageSize) {
+          if (fetchedData.page && fetchedData.pageSize) {
+            setSearchParams({
+              page: fetchedData.page.toString(),
+              pageSize: fetchedData.pageSize.toString(),
+            });
+          }
         }
       }
     } catch (error) {
@@ -51,13 +52,20 @@ function Catalog() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, currentPageSize, searchValue, setSeacrhParams]);
+  }, [
+    currentPage,
+    currentPageSize,
+    searchValue,
+    setData,
+    setSearchParams,
+    setIsLoading,
+  ]);
 
   const handleSendSearchValue = async (): Promise<void> => {
     localStorage.setItem('searchValue', searchValue);
-    hanldeFetchDataAndSetData();
+    handleFetchDataAndSetData();
     if (data) {
-      setSeacrhParams({
+      setSearchParams({
         page: '1',
         pageSize: data.pageSize.toString(),
       });
@@ -65,8 +73,8 @@ function Catalog() {
   };
 
   useEffect(() => {
-    hanldeFetchDataAndSetData();
-  }, [currentPage, pageSize, hanldeFetchDataAndSetData]);
+    handleFetchDataAndSetData();
+  }, [currentPage, pageSize, handleFetchDataAndSetData]);
 
   const isPaginateNecessary: boolean | null =
     data && data?.totalCount > data?.pageSize;
@@ -74,8 +82,6 @@ function Catalog() {
   return (
     <div className={classes.catalog}>
       <Searcher
-        searchValue={searchValue}
-        isLoading={isLoading}
         pageSize={pageSize}
         handleUpdateSearchValue={handleUpdateSearchValue}
         handleSendSearchValue={handleSendSearchValue}
@@ -83,12 +89,9 @@ function Catalog() {
       />
       <div className={classes.content}>
         <section>
-          <CardList isLoading={isLoading} data={data?.data || []} />
+          <CardList />
           {isPaginateNecessary && (
-            <Paginator
-              data={data}
-              handleUpdatePageNumber={handleUpdatePageNumber}
-            />
+            <Paginator handleUpdatePageNumber={handleUpdatePageNumber} />
           )}
         </section>
         <section>

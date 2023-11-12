@@ -3,10 +3,9 @@ import classes from './Searcher.module.css';
 import Button from '../UI/Button/Button';
 import Dropdown from '../UI/Dropdown/Dropdown';
 import SearchBar from '../UI/SearchBar/SearchBar';
+import { useAppContext } from '../../context/appContext';
 
 export interface SearchDataProps {
-  searchValue: string;
-  isLoading: boolean;
   pageSize: string | null;
   handleUpdateSearchValue: (value: string) => void;
   handleSendSearchValue: () => void;
@@ -14,13 +13,12 @@ export interface SearchDataProps {
 }
 
 function Searcher({
-  searchValue,
-  isLoading,
   pageSize,
   handleUpdateSearchValue,
   handleSendSearchValue,
   handleUpdateItemsOnPage,
 }: SearchDataProps) {
+  const { searchValue, isLoading } = useAppContext()!;
   return (
     <header className={classes.searcher}>
       <SearchBar

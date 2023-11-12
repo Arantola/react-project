@@ -1,16 +1,16 @@
 import classes from './Paginator.module.css';
 
 import { UpdatePageNumberTypes } from '../../../hooks/usePaginaton/usePagination';
-import { ApiResponse } from '../../../services/apiTypes';
-
+import { useAppContext } from '../../../context/appContext';
 import Button from '../Button/Button';
 
 interface PaginateProps {
-  data: ApiResponse | null;
   handleUpdatePageNumber: (type: UpdatePageNumberTypes) => void;
 }
 
-function Paginator({ data, handleUpdatePageNumber }: PaginateProps) {
+function Paginator({ handleUpdatePageNumber }: PaginateProps) {
+  const { data } = useAppContext()!;
+
   const totalPages =
     data?.totalCount && data?.pageSize
       ? Math.ceil(data.totalCount / data.pageSize)

@@ -3,20 +3,21 @@ import classes from './CardList.module.css';
 import { PokemonCard } from '../../services/apiTypes';
 import Card from '../Card/Card';
 import Spinner from '../UI/Spinner/Spinner';
+import { useAppContext } from '../../context/appContext';
 
-export interface CardListProps {
-  data: PokemonCard[] | null;
-  isLoading: boolean;
-}
-
-function CardList({ data, isLoading }: CardListProps) {
+function CardList() {
+  const { data, isLoading } = useAppContext()!;
+  const cards = data?.data;
+  const isCardsExist = cards != null && cards.length > 0;
   return (
     <div className={classes.list}>
       {isLoading && <Spinner />}
-      {!isLoading && data?.length === 0 && <span>No data</span>}
-      {!isLoading && data?.length && (
+      {!isLoading && !isCardsExist && <span>No data</span>}
+      {!isLoading && isCardsExist && (
         <ul>
-          {data?.map((item: PokemonCard) => <Card key={item.id} item={item} />)}
+          {cards?.map((item: PokemonCard) => (
+            <Card key={item.id} item={item} />
+          ))}
         </ul>
       )}
     </div>
