@@ -76,5 +76,6 @@ module.exports = {
     'build/',
     'vite.config.ts',
     '.eslintrc.cjs',
+    'jest.config.cjs',
   ],
 };
