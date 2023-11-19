@@ -1,22 +1,19 @@
 import classes from './Dropdown.module.css';
 
-export interface DropDownProps {
-  pageSize: string | null;
-  handleUpdateItemsOnPage: (value: string) => void;
-}
+import useCurrentSearchParams from '../../../hooks/useSearchParams';
 
-export default function Dropdown({
-  pageSize,
-  handleUpdateItemsOnPage,
-}: DropDownProps) {
-  const selectOptions = [5, 10, 15, 20];
+export default function Dropdown() {
+  const selectOptions = ['5', '10', '15', '20'];
+  const { setSearchParams } = useCurrentSearchParams();
+
+  const handleUpdateItemsOnPage = (value: string) => {
+    setSearchParams({ page: '1', pageSize: value });
+  };
+
   return (
     <div className={classes.select}>
       <h4>Number of card on the page:</h4>
       <select onChange={(e) => handleUpdateItemsOnPage(e.target.value)}>
-        <option value="" hidden>
-          {pageSize}
-        </option>
         {selectOptions.map((option) => (
           <option key={option} value={option}>
             {option}

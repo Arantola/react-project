@@ -1,42 +1,39 @@
+import { useState } from 'react';
+
 import classes from './Searcher.module.css';
 
 import Button from '../UI/Button/Button';
 import Dropdown from '../UI/Dropdown/Dropdown';
 import SearchBar from '../UI/SearchBar/SearchBar';
-import { useAppContext } from '../../context/appContext';
 
-export interface SearchDataProps {
-  pageSize: string | null;
-  handleUpdateSearchValue: (value: string) => void;
-  handleSendSearchValue: () => void;
-  handleUpdateItemsOnPage: (value: string) => void;
-}
+import { useFetchDataQuery } from '../../services/apiService';
+import useCurrentSearchParams from '../../hooks/useSearchParams';
 
-function Searcher({
-  pageSize,
-  handleUpdateSearchValue,
-  handleSendSearchValue,
-  handleUpdateItemsOnPage,
-}: SearchDataProps) {
-  const { searchValue, isLoading } = useAppContext()!;
+function Searcher() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const { getSearchParams, setSearchParams } = useCurrentSearchParams();
+  const { isLoading, isFetching } = useFetchDataQuery(getSearchParams());
+
+  const handleSendSearchValue = async (): Promise<void> => {
+    setSearchParams({ name: searchTerm });
+  };
+
   return (
     <header className={classes.searcher}>
       <SearchBar
-        value={searchValue || ''}
+        value={searchTerm || ''}
         placeholder="Enter character name"
-        onChange={(newValue) => handleUpdateSearchValue(newValue)}
+        onChange={(newValue) => setSearchTerm(newValue)}
       />
       <Button
         className={classes.button}
         onClick={handleSendSearchValue}
-        disabled={isLoading}
+        disabled={isLoading || isFetching}
       >
         Search
       </Button>
-      <Dropdown
-        handleUpdateItemsOnPage={handleUpdateItemsOnPage}
-        pageSize={pageSize}
-      />
+      <Dropdown />
     </header>
   );
 }

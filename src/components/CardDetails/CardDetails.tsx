@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useLoaderData, useNavigation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import classes from './CardDetails.module.css';
 
+import { useFetchDataWithIDQuery } from '../../services/apiService';
 import Spinner from '../UI/Spinner/Spinner';
 import Button from '../UI/Button/Button';
 
@@ -18,36 +19,47 @@ export interface LoadedData {
 
 function Details() {
   const { id } = useParams();
-  const navigation = useNavigation();
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const currentURL = new URL(window.location.href);
-  const data = useLoaderData() as LoadedData;
+  const [isDetailsOpen, setIsDetailsOpen] = useState<boolean>(false);
 
-  const { name, hp, rarity, types, flavorText } = data.data;
+  const { data, error, isLoading, isFetching, isSuccess } =
+    useFetchDataWithIDQuery(id);
+
+  const currentURL = new URL(window.location.href);
+  useEffect(() => {
+    if (id && currentURL.pathname.includes(id)) {
+      setIsDetailsOpen(true);
+    }
+  }, [id, currentURL.pathname]);
+
+  if (!data) {
+    return (
+      <section className={classes.card}>
+        {error && <h2>Something went wrong</h2>}
+        {(isLoading || isFetching) && <Spinner />}
+      </section>
+    );
+  }
+
+  const { name, hp, rarity, types, flavorText } = data.data || {};
 
   const handleCloseSideMenu = () => {
     currentURL.pathname = '';
     window.history.pushState(null, '', currentURL.toString());
-    setIsMenuOpen(false);
+    setIsDetailsOpen(false);
   };
+  if (!isDetailsOpen) return null;
 
-  useEffect(() => {
-    if (id && currentURL.pathname.includes(id)) {
-      setIsMenuOpen(true);
-    }
-  }, [id, currentURL.pathname]);
-  if (!isMenuOpen) return null;
   return (
     <section className={classes.card}>
-      {navigation.state === 'loading' ? (
-        <Spinner />
-      ) : (
+      {error && <h2>Something went wrong</h2>}
+      {(isLoading || isFetching) && <Spinner />}
+      {isSuccess && (
         <>
           <div className={classes.info}>
             <p>Name: {name}</p>
             <p>HP: {hp}</p>
             <p>Rarity: {rarity}</p>
-            <p>Type: {types[0]}</p>
+            <p>Type: {types && types.length > 0 ? types[0] : 'N/A'}</p>
             <p>Description: {flavorText}</p>
           </div>
           <Button onClick={handleCloseSideMenu}>Close Card</Button>
